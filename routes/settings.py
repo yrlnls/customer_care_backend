@@ -10,7 +10,7 @@ settings_bp = Blueprint('settings', __name__)
 @jwt_required()
 def get_settings():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
 
         if user.role != 'admin':
@@ -26,7 +26,7 @@ def get_settings():
 @jwt_required()
 def update_settings():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
 
         if user.role != 'admin':
@@ -84,7 +84,7 @@ def update_settings():
 @jwt_required()
 def get_setting(key):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
 
         if user.role != 'admin':

@@ -24,9 +24,9 @@ def login():
         
         if user.status != 'active':
             return jsonify({'error': 'Account is not active'}), 401
-        
-        access_token = create_access_token(identity=user.id)
-        
+
+        access_token = create_access_token(identity=str(user.id))
+
         # Log activity
         activity = ActivityLog(
             user_id=user.id,
@@ -70,9 +70,9 @@ def register():
         
         db.session.add(user)
         db.session.commit()
-        
-        access_token = create_access_token(identity=user.id)
-        
+
+        access_token = create_access_token(identity=str(user.id))
+
         return jsonify({
             'access_token': access_token,
             'user': user.to_dict()
@@ -85,7 +85,7 @@ def register():
 @jwt_required()
 def get_profile():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if not user:
@@ -100,7 +100,7 @@ def get_profile():
 @jwt_required()
 def update_profile():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if not user:

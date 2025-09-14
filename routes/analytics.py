@@ -13,7 +13,7 @@ analytics_bp = Blueprint('analytics', __name__)
 @jwt_required()
 def get_dashboard_analytics():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         # Basic counts
@@ -93,7 +93,7 @@ def get_dashboard_analytics():
 @jwt_required()
 def export_csv():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role not in ['admin', 'agent']:
@@ -171,7 +171,7 @@ def export_csv():
 @jwt_required()
 def get_performance_metrics():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role != 'admin':

@@ -19,7 +19,7 @@ def get_clients():
 @jwt_required()
 def create_client():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         data = request.get_json()
         
         required_fields = ['name', 'email', 'phone', 'address']
@@ -75,7 +75,7 @@ def get_client(client_id):
 @jwt_required()
 def update_client(client_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         client = Client.query.get(client_id)
         
         if not client:
@@ -124,7 +124,7 @@ def update_client(client_id):
 @jwt_required()
 def delete_client(client_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role not in ['admin', 'agent']:

@@ -20,7 +20,7 @@ def get_sites():
 @jwt_required()
 def create_site():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role not in ['admin', 'technician']:
@@ -66,7 +66,7 @@ def create_site():
 @jwt_required()
 def update_site(site_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role not in ['admin', 'technician']:
@@ -120,7 +120,7 @@ def update_site(site_id):
 @jwt_required()
 def delete_site(site_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role not in ['admin', 'technician']:

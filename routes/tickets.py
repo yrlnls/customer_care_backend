@@ -10,7 +10,7 @@ tickets_bp = Blueprint('tickets', __name__)
 @jwt_required()
 def get_tickets():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if not user:
@@ -31,7 +31,7 @@ def get_tickets():
 @jwt_required()
 def create_ticket():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         data = request.get_json()
         
         required_fields = ['title', 'client_id']
@@ -85,7 +85,7 @@ def get_ticket(ticket_id):
 @jwt_required()
 def update_ticket(ticket_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         ticket = Ticket.query.get(ticket_id)
 
@@ -137,7 +137,7 @@ def update_ticket(ticket_id):
 @jwt_required()
 def delete_ticket(ticket_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role not in ['admin', 'agent']:
@@ -170,7 +170,7 @@ def delete_ticket(ticket_id):
 @jwt_required()
 def add_comment(ticket_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         data = request.get_json()
         
         if not data.get('comment'):

@@ -20,7 +20,7 @@ def get_routers():
 @jwt_required()
 def create_router():
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         data = request.get_json()
         
         required_fields = ['model', 'serial_number', 'client_id']
@@ -67,7 +67,7 @@ def create_router():
 @jwt_required()
 def update_router(router_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         router = Router.query.get(router_id)
         
         if not router:
@@ -121,7 +121,7 @@ def update_router(router_id):
 @jwt_required()
 def delete_router(router_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if user.role not in ['admin', 'agent']:
@@ -154,7 +154,7 @@ def delete_router(router_id):
 @jwt_required()
 def update_router_status(router_id):
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         router = Router.query.get(router_id)
         
         if not router:
