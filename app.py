@@ -17,7 +17,7 @@ jwt = JWTManager(app)
 # Configure CORS to allow React frontend
 CORS(
     app,
-    resources={r"/api/*": {"origins": "http://localhost:3000"}},
+    resources={r"/api/*": {"origins": app.config['FRONTEND_URL']}},
     supports_credentials=True,
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"]

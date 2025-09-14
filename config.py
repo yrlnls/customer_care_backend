@@ -8,3 +8,4 @@ class Config:
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-string'
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=24)
     JWT_ALGORITHM = 'HS256'
+    FRONTEND_URL = os.environ.get('FRONTEND_URL') or 'http://localhost:3000'

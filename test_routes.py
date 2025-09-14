@@ -48,6 +48,7 @@ def test_route(url, method='GET', token=None, data=None, expected_status=200):
     headers = {}
     if token:
         headers['Authorization'] = f'Bearer {token}'
+        print(f"  Sending token: {token[:20]}...")  # Debug: show first 20 chars of token
 
     try:
         if method == 'GET':
@@ -130,6 +131,25 @@ def main():
     print("Testing protected routes:")
     protected_passed = 0
     for url, method, data, expected in protected_routes:
+        # First check if route exists (without auth)
+        try:
+            if method == 'GET':
+                check_response = requests.get(url)
+            elif method == 'POST':
+                check_response = requests.post(url, json=data or {})
+            else:
+                check_response = requests.get(url)  # fallback
+            if check_response.status_code == 404:
+                print(f"{method} {url}: 404 ✗ (Route not found)")
+                continue
+            elif check_response.status_code == 401 and "Missing Authorization Header" in check_response.text:
+                print(f"{method} {url}: Route exists and requires auth")
+            else:
+                print(f"{method} {url}: Unexpected response without auth: {check_response.status_code}")
+        except Exception as e:
+            print(f"{method} {url}: Error checking route existence: {e}")
+            continue
+
         if test_route(url, method, token, data, expected):
             protected_passed += 1
     print(f"Protected routes: {protected_passed}/{len(protected_routes)} passed\n")
