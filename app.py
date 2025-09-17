@@ -59,10 +59,18 @@ def serve_client(path):
         return not_found(None)
 
     client_build_dir = os.path.join(os.path.dirname(__file__), 'client_build')
-    # Serve static file if it exists, otherwise return index.html for SPA routing
+
+    # Serve static file if it exists
     if path != '' and os.path.exists(os.path.join(client_build_dir, path)):
         return send_from_directory(client_build_dir, path)
-    return send_from_directory(client_build_dir, 'index.html')
+
+    # Serve index.html if it exists
+    index_file = os.path.join(client_build_dir, 'index.html')
+    if os.path.exists(index_file):
+        return send_from_directory(client_build_dir, 'index.html')
+
+    # Fallback: return a success message if React build is missing
+    return "<h1>Customer Care Backend is running ✅</h1>"
 
 # Health check endpoint
 @app.route('/api/health', methods=['GET'])

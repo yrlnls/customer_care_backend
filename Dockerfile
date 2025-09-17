@@ -22,5 +22,5 @@ USER app
 # Expose port
 EXPOSE 5000
 
-# Run the application
-CMD ["python", "run.py"]
+# Use Gunicorn and bind to Render's $PORT (must run inside shell!)
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:$PORT run:app"]
