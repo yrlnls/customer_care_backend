@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
 from config import Config
@@ -14,20 +13,17 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-# Configure CORS to allow React frontend
+# Configure CORS to allow React frontend + localhost
 CORS(
     app,
-    resources={r"/api/*": {"origins": app.config['FRONTEND_URL']}},
+    resources={r"/api/*": {"origins": [
+        "https://customer-care-frontend.netlify.app",
+        "http://localhost:3000"
+    ]}},
     supports_credentials=True,
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"]
 )
-
-# Handle preflight requests explicitly (important for JWT-protected routes)
-@app.before_request
-def handle_options():
-    if request.method == "OPTIONS":
-        return "", 200
 
 # Import models after db initialization
 from models import User, Client, Ticket, Router, Site, ActivityLog, TicketComment
@@ -40,6 +36,7 @@ from routes.users import users_bp
 from routes.sites import sites_bp
 from routes.routers import routers_bp
 from routes.analytics import analytics_bp
+from routes.settings import settings_bp
 
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
@@ -49,6 +46,7 @@ app.register_blueprint(users_bp, url_prefix='/api/users')
 app.register_blueprint(sites_bp, url_prefix='/api/sites')
 app.register_blueprint(routers_bp, url_prefix='/api/routers')
 app.register_blueprint(analytics_bp, url_prefix='/api/analytics')
+app.register_blueprint(settings_bp, url_prefix='/api/settings')
 
 # Serve frontend (single page app). Any non-API route will return index.html from the build.
 @app.route('/', defaults={'path': ''})
